@@ -17,21 +17,19 @@ app.use(cors());
 app.use(express.json());
 
 // --- GOOGLE SHEETS SETUP ---
-const CREDENTIALS_PATH = path.join(__dirname, 'google-credentials.json');
-let googleCredentials;
-if (fs.existsSync(CREDENTIALS_PATH)) {
-  googleCredentials = require(CREDENTIALS_PATH);
-} else {
-  console.warn('Google credentials file not found.');
-}
+
+const CREDENTIALS_PATH = '/etc/secrets/google-credentials.json';  // Render secret file path
+
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
+
 function getGoogleSheetsClient() {
   const auth = new google.auth.GoogleAuth({
-    credentials: googleCredentials,
+    keyFile: CREDENTIALS_PATH,
     scopes: SCOPES,
   });
   return google.sheets({ version: 'v4', auth });
 }
+
 // --- END GOOGLE SHEETS SETUP ---
 
 // --- INIT DB TABLES IF NOT EXIST ---
