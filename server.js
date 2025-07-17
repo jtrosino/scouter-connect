@@ -96,7 +96,7 @@ app.post('/api/login', (req, res) => {
     if (!user || !bcrypt.compareSync(password, user.password_hash)) {
       return res.status(400).json({ message: "Usuário ou senha inválidos" });
     }
-    const token = jwt.sign({ username }, SECRET_KEY, { expiresIn: '2h' });
+    const token = jwt.sign({ username }, SECRET_KEY, { expiresIn: '8h' });
     res.json({
       firstName: user.first_name,
       lastName: user.last_name,
