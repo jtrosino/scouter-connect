@@ -120,9 +120,9 @@ app.post('/api/creators', authenticateToken, async (req, res) => {
   const { nome, sobrenome, responsavel, instagram, tiktok, telefone, whatsapp, obs, username } = req.body;
   const user = username || req.user.username;
   db.run(
-    `INSERT INTO creators (nome, sobrenome, responsavel, instagram, tiktok, telefone, whatsapp, obs, username)
+    `INSERT INTO creators (nome, sobrenome, responsavel, instagram, tiktok, telefone, whatsapp, obs, username, created_at)
      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [nome, sobrenome, responsavel, instagram, tiktok, telefone, whatsapp, obs, user],
+    [nome, sobrenome, responsavel, instagram, tiktok, telefone, whatsapp, obs, user, req.body.timestamp || null]
     async function (err) {
       if (err) {
         return res.status(500).json({ message: 'Erro ao adicionar creator' });
