@@ -119,10 +119,20 @@ app.get('/api/creators', authenticateToken, (req, res) => {
 app.post('/api/creators', authenticateToken, async (req, res) => {
   const { nome, sobrenome, responsavel, instagram, tiktok, telefone, whatsapp, obs, username } = req.body;
   const user = username || req.user.username;
-  db.run(
+  
+    // 1) compute São Paulo local time in JS
+    const now = new Date();
+    const saoPauloDateTime = now.toLocaleString('sv', {
+      timeZone: 'America/Sao_Paulo',
+      hour12: false
+    }).replace('T', ' ');
+    // 2) pass that into SQLite (and later to Sheets)
+  
+    db.run(
     `INSERT INTO creators (nome, sobrenome, responsavel, instagram, tiktok, telefone, whatsapp, obs, username, created_at)
      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-    [nome, sobrenome, responsavel, instagram, tiktok, telefone, whatsapp, obs, user, req.body.timestamp || null],
+    [nome, sobrenome, responsavel, instagram, tiktok, telefone, whatsapp, obs, user, saoPauloDateTime    // ← now in BRT
+    ],
     async function (err) {
       if (err) {
         return res.status(500).json({ message: 'Erro ao adicionar creator' });
