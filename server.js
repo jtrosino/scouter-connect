@@ -121,7 +121,7 @@ app.post('/api/creators', authenticateToken, async (req, res) => {
   const user = username || req.user.username;
   db.run(
     `INSERT INTO creators (nome, sobrenome, responsavel, instagram, tiktok, telefone, whatsapp, obs, username, created_at)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [nome, sobrenome, responsavel, instagram, tiktok, telefone, whatsapp, obs, user, req.body.timestamp || null],
     async function (err) {
       if (err) {
