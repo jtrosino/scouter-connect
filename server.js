@@ -169,6 +169,7 @@ app.post('/api/creators', authenticateToken, async (req, res) => {
 
           res.json({ ...row, sheetSync: true });
         } catch (error) {
+          console.error('Google Sheets sync error:', error);
           res.json({ ...row, sheetSync: false, error: 'Não foi possível sincronizar com o Google Sheets agora.' });
         }
       });
