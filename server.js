@@ -10,7 +10,7 @@ const { google } = require('googleapis');
 const path = require('path');
 
 const app = express();
-const db = new sqlite3.Database('./users.db');
+const db = new sqlite3.Database('/var/data/users.db');
 const SECRET_KEY = 'pR+_8eVEc#*roS$LqO44ET';
 
 app.use(cors());
@@ -490,21 +490,6 @@ app.delete('/api/calendar/:id', authenticateToken, async (req, res) => {
 });
 
 // [END CALENDAR PATCH]
-
-
-
-// --- ADMIN EXPORT CREATORS (DEBUG) ---
-app.get('/api/admin/export-creators', (req, res) => {
-  const adminKey = req.query.key;
-  if (adminKey !== process.env.ADMIN_KEY) {
-    return res.status(403).json({ message: 'Forbidden' });
-  }
-  db.all('SELECT * FROM creators ORDER BY created_at DESC', [], (err, rows) => {
-    if (err) return res.status(500).json({ message: 'DB error' });
-    res.json(rows);
-  });
-});
-// --- END ADMIN EXPORT CREATORS ---
 
 
 // Serve static files from React build
