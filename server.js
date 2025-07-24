@@ -117,7 +117,7 @@ app.get('/api/creators', authenticateToken, (req, res) => {
 
 // --- Add creator ---
 app.post('/api/creators', authenticateToken, async (req, res) => {
-  console.log("New creator request received:", req.body);
+  // console.log("New creator request received:", req.body);
   const { nome, sobrenome, responsavel, instagram, tiktok, telefone, whatsapp, obs, username } = req.body;
   const user = username || req.user.username;
   
@@ -167,10 +167,10 @@ app.post('/api/creators', authenticateToken, async (req, res) => {
             insertDataOption: 'INSERT_ROWS',
             resource: { values: [newRow] }
           });
-          console.log('Google Sheets sync success:', newRow);
+          // console.log('Google Sheets sync success:', newRow);
           res.json({ ...row, sheetSync: true });
         } catch (error) {
-          console.error('Google Sheets sync error:', error);
+          // console.error('Google Sheets sync error:', error);
           res.json({ ...row, sheetSync: false, error: 'Não foi possível sincronizar com o Google Sheets agora.' });
         }
       });
@@ -224,7 +224,7 @@ app.put('/api/creators/:id', authenticateToken, async (req, res) => {
       const sheets = getGoogleSheetsClient();
       const readRes = await sheets.spreadsheets.values.get({
         spreadsheetId: SPREADSHEET_ID,
-        range: 'Sheet1'
+        range: 'Sheet1!A:K'
       });
       const rows = readRes.data.values;
       const idCol = rows[0].indexOf('ID');
@@ -255,10 +255,10 @@ app.put('/api/creators/:id', authenticateToken, async (req, res) => {
           requestBody: { values: [values] }
         });
       } else {
-        console.warn('No matching row found in sheet for update!');
+        // console.warn('No matching row found in sheet for update!');
       }
     } catch (err) {
-      console.error('Google Sheets update failed:', err.message);
+      // console.error('Google Sheets update failed:', err.message);
     }
 
     res.json({ message: 'Creator updated successfully' });
@@ -318,10 +318,10 @@ app.delete('/api/creators/:id', authenticateToken, async (req, res) => {
           }
         });
       } else {
-        console.warn('No matching row found in sheet for delete!');
+        // console.warn('No matching row found in sheet for delete!');
       }
     } catch (err) {
-      console.error('Google Sheets delete failed:', err.message);
+      // console.error('Google Sheets delete failed:', err.message);
     }
 
     // Delete from SQLite
@@ -370,7 +370,7 @@ app.get('/api/calendar', authenticateToken, async (req, res) => {
     }));
     res.json(result);
   } catch (err) {
-    console.error('GET /api/calendar error:', err);
+    // console.error('GET /api/calendar error:', err);
     res.status(500).json({ message: 'Erro ao ler o calendário' });
   }
 });
@@ -408,7 +408,7 @@ app.post('/api/calendar', authenticateToken, async (req, res) => {
 
     res.json({ id: newId, data, localizacao, notas: notas || '' });
   } catch (err) {
-    console.error('POST /api/calendar error:', err);
+    // console.error('POST /api/calendar error:', err);
     res.status(500).json({ message: 'Erro ao adicionar local no calendário' });
   }
 });
@@ -441,7 +441,7 @@ app.put('/api/calendar/:id', authenticateToken, async (req, res) => {
 
     res.json({ id, data, localizacao, notas: notas || '' });
   } catch (err) {
-    console.error('PUT /api/calendar/:id error:', err);
+    // console.error('PUT /api/calendar/:id error:', err);
     res.status(500).json({ message: 'Erro ao atualizar local do calendário' });
   }
 });
@@ -486,13 +486,12 @@ app.delete('/api/calendar/:id', authenticateToken, async (req, res) => {
 
     res.json({ message: 'Registro removido com sucesso.' });
   } catch (err) {
-    console.error('DELETE /api/calendar/:id error:', err);
+    // console.error('DELETE /api/calendar/:id error:', err);
     res.status(500).json({ message: 'Erro ao remover local do calendário' });
   }
 });
 
 // [END CALENDAR PATCH]
-
 
 // Serve static files from React build
 
@@ -501,8 +500,7 @@ app.get('*', (req, res) => {
   res.sendFile('index.html', { root: 'build' });
 });
 
-
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  // console.log(`Server running on port ${PORT}`);
 });
