@@ -167,7 +167,7 @@ app.post('/api/creators', authenticateToken, async (req, res) => {
             insertDataOption: 'INSERT_ROWS',
             resource: { values: [newRow] }
           });
-
+          console.log('Google Sheets sync success:', newRow);
           res.json({ ...row, sheetSync: true });
         } catch (error) {
           console.error('Google Sheets sync error:', error);
@@ -503,7 +503,6 @@ app.get('*', (req, res) => {
 
 
 const PORT = process.env.PORT || 4000;
-console.log('Using port:', PORT);
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
