@@ -117,6 +117,7 @@ app.get('/api/creators', authenticateToken, (req, res) => {
 
 // --- Add creator ---
 app.post('/api/creators', authenticateToken, async (req, res) => {
+  console.log("New creator request received:", req.body);
   const { nome, sobrenome, responsavel, instagram, tiktok, telefone, whatsapp, obs, username } = req.body;
   const user = username || req.user.username;
   
